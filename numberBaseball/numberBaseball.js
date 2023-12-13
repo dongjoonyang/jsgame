@@ -1,9 +1,9 @@
-// 4글자
+let opponentEle = document.querySelector('#opponentEle'); // 상대 선수의 4자리 숫자(임시)
+
 const numbers = [];
 let baseBall = [];
-const base = document.querySelector('#base');
 
-// numbers 1~9 숫자 적립
+// 상대편 숫자 
 for(let i = 1; i < 9 ; i++){
   numbers.push(i);
 }
@@ -15,8 +15,7 @@ for(let n = 0; n <= 3; n++){
   numbers.splice(index, 1); 
 }
 
-console.log(numbers)
-base.innerHTML = numbers;
+opponentEle.innerHTML = numbers;
 
 // 사용자가 입력하면 비교해서 홈런 , 스트라이크, 볼 답 전달
 // 10번 실패시 실패 전달
