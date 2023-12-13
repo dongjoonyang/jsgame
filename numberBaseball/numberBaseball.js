@@ -1,60 +1,59 @@
-let opponentEle = document.querySelector('#opponentEle'); // 상대 선수의 4자리 숫자(임시)
+let opponentEle = document.querySelector('#opponentEle'); // 상대 선수의 4자리 숫자를 보여줄 임시 엘레먼트
 
-const numbers = [];
-let baseBall = [];
+const numbers = []; // 1~9 까지 기본 숫자 담을 배열 변수
+let opponentBaseBallNum = []; // 상대 선수의 실제 4자리 숫자를 담을 배열 변수
 
-// 상대편 숫자 
-for(let i = 1; i < 9 ; i++){
+// 1~9 까지 배열에 담는 반복문
+for(let i = 1; i <= 9 ; i++){
   numbers.push(i);
 }
 
-// 첫 base number 적립 4자리 숫자
+// 상대 선수 실제 4자리 담는 반복문
 for(let n = 0; n <= 3; n++){
   let index = Math.floor(Math.random() * numbers.length); 
-  baseBall.push(numbers[index]); 
+  opponentBaseBallNum.push(numbers[index]); // 실제 4자리 숫자 적용
   numbers.splice(index, 1); 
 }
 
-opponentEle.innerHTML = numbers;
+opponentEle.innerHTML = opponentBaseBallNum; // 상대편 4자리 숫자 확인
 
-// 사용자가 입력하면 비교해서 홈런 , 스트라이크, 볼 답 전달
-// 10번 실패시 실패 전달
-const inputVal = document.querySelector('#inputVal');
-const formData = document.querySelector('#formData');
-const logVal = document.querySelector('#log');
+// DOM 엘레먼트
+const inputVal = document.querySelector('#inputVal'); // 유저 입력창
+const formData = document.querySelector('#formData'); // 데이터 전달
+const logVal = document.querySelector('#log'); // 상태창
 
-let count = 0;
+let count = 0; // 횟수 제한 카운터 (10번)
 
-// 숫자 3개를 입력한다.
 formData.onsubmit = function(e) {
   e.preventDefault();
-  const userValue = inputVal.value;
-  if(!isNaN(userValue)){
-    const userArr = [...userValue];
-    const userNumbers = userArr.map(Number);
+  const userValue = inputVal.value; // 유저 입력값
 
-    let s = 0; //strike
-    let b = 0; //ball
-    let o = 0; //out
+  if(!isNaN(userValue)){ // 유저 입력값이 숫자인 경우에만 통과
+    const userArr = [...userValue]; // 숫자 string 배열로 변환
+    const userNumbers = userArr.map(Number); // 배열 string 숫자로 변경
 
-    const set = new Set(userNumbers);
+    let strike = 0; //strike 변수 카운터
+    let ball = 0; // ball 변수 카운터
+    let out = 0; // out 변수 카운터
+
+    const set = new Set(userNumbers); // 공통 숫자 체크
     if(!((userArr).length !== set.size) && !userNumbers.includes(0) && userNumbers.length === 4){
 
       for(let i = 0; i < userNumbers.length; i++){
         for(let j = 0; j < userNumbers.length; j++){
-          if(numbers[i] === userNumbers[j] && i === j){
+          if(opponentBaseBallNum[i] === userNumbers[j] && i === j){
             // strike
-            s += 1;
-            console.log(`strike :${s}, ball : ${b}, out : ${o}`);
-          }else if(numbers[i] === userNumbers[j] && i !== j){
+            strike += 1;
+            console.log(`strike :${strike}, ball : ${ball}, out : ${out}`);
+          }else if(opponentBaseBallNum[i] === userNumbers[j] && i !== j){
             // ball
-            b += 1;
-            console.log(`strike :${s}, ball : ${b}, out : ${o}`);
+            ball += 1;
+            console.log(`strike :${strike}, ball : ${ball}, out : ${out}`);
           }else{
             // out
             let outNumber = 0;
-            o += 1;
-            switch (o) {
+            out += 1;
+            switch (out) {
               case 13:
                 outNumber = '1';
                 break;
@@ -70,7 +69,7 @@ formData.onsubmit = function(e) {
               default:
                 break;
             }
-            console.log(`strike :${s}, ball : ${b}, out : ${outNumber}`);
+            console.log(`strike :${strike}, ball : ${ball}, out : ${outNumber}`);
           }
         }
       }
@@ -78,7 +77,7 @@ formData.onsubmit = function(e) {
       // 로그에 입력한 값 추가
       logVal.innerHTML += `${userNumbers.join('')}<br>`;
 
-      if(s === 4){
+      if(strike === 4){
         alert("홈런입니다.");
         count = 0;
       }else{
