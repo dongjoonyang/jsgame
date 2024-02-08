@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 추첨기 - 로또 걸려라</title>
+    <style>
+        .ball {
+          display: inline-block;
+          border: 1px solid black;
+          border-radius: 20px;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          font-size: 20px;
+          text-align: center;
+          margin-right: 20px;
+        }
+      </style>
+</head>
+<body>
+    <div id="result">추첨 결과는? <span></span></div>
+    <div id="bonus">보너스: <span></span></div>
+
+    <script>
+        // 1 ~ 45까지 숫자를 준비한다
+        // 숫자를 섞는다
+        // 공 7개를 뽑는다, 마지막 공은 보너스가 된다.
+        // 1초마다 공을 하나씩 화면에 표시한다. 끝
+        
+        const numbers = [];
+
+        for(let i = 1; i <= 45 ; i += 1){
+            numbers.push(i);
+        }
+
+        const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
+        shuffleArray(numbers);
+
+        const lottoNumbers = [];
+
+        for(let n = 0; n <= 6; n += 1){
+            
+            let random = Math.floor(Math.random() * numbers.length);
+
+            lottoNumbers.push(numbers[random]);
+            numbers.splice(random, 1);            
+
+            setTimeout(function(){
+                const result = document.querySelector("#result span");
+                const bonus = document.querySelector("#bonus span");
+
+                lottoNumbers.forEach((lottoNumber) => {
+                    result.innerHTML = lottoNumber;
+
+                    if(lottoNumbers.length === 6){
+                        bonus.innerHTML = lottoNumber;
+                    }
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
