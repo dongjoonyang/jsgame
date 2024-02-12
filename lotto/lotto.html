@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로또 추첨기 - 로또 걸려라</title>
     <style>
-        .ball {
+        span {
           display: inline-block;
           border: 1px solid black;
           border-radius: 20px;
@@ -19,14 +19,15 @@
       </style>
 </head>
 <body>
-    <div id="result">추첨 결과는? <span></span></div>
-    <div id="bonus">보너스: <span></span></div>
+    <div id="result">추첨 결과 : </div>
+    <div id="bonus">보너스 : </div>
 
     <script>
-        // 1 ~ 45까지 숫자를 준비한다
-        // 숫자를 섞는다
-        // 공 7개를 뽑는다, 마지막 공은 보너스가 된다.
-        // 1초마다 공을 하나씩 화면에 표시한다. 끝
+        // 1 ~ 45까지 숫자 생성
+        // 숫자 랜덤 섞기
+        // 공 7개를 뽑는다, 마지막 공은 보너스
+        // 섞은 랜덤 숫자 오름차순 정렬
+        // 1초마다 공을 하나씩 화면에 표시
         
         const numbers = [];
 
@@ -35,29 +36,46 @@
         }
 
         const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
-        shuffleArray(numbers);
 
         const lottoNumbers = [];
 
         for(let n = 0; n <= 6; n += 1){
-            
             let random = Math.floor(Math.random() * numbers.length);
 
             lottoNumbers.push(numbers[random]);
-            numbers.splice(random, 1);            
+            numbers.splice(random, 1);
+        }
+
+        // 선택 정렬 알고리즘 오름차순 정렬
+        const bubbleSort = (lottoNumbers) => {
+            for(let n = 0; n < lottoNumbers.length; n += 1){ 
+                for(let j = 0; j < lottoNumbers.length - 1; j += 1){ 
+                    if(lottoNumbers[j] > lottoNumbers[j + 1]) {
+                        [lottoNumbers[j], lottoNumbers[j + 1]] = [lottoNumbers[j + 1], lottoNumbers[j]];
+                        
+                    }
+                }
+            }
+            return lottoNumbers;
+        }
+        
+        bubbleSort(lottoNumbers);
+
+
+        for(let i = 0; i < lottoNumbers.length; i += 1){
+            const result = document.querySelector("#result");
+            const bonus = document.querySelector("#bonus");
+            const temp = document.createElement("span");
+
+            temp.innerHTML = `${lottoNumbers[i]}`;
 
             setTimeout(function(){
-                const result = document.querySelector("#result span");
-                const bonus = document.querySelector("#bonus span");
-
-                lottoNumbers.forEach((lottoNumber) => {
-                    result.innerHTML = lottoNumber;
-
-                    if(lottoNumbers.length === 6){
-                        bonus.innerHTML = lottoNumber;
-                    }
-                });
-            }, 1000);
+                if(i === 6) {
+                    bonus.append(temp);
+                } else {
+                    result.append(temp);
+                }
+            }, 1000 * i);
         }
     </script>
 </body>
