@@ -66,10 +66,17 @@
         let intervalId = setInterval(changeComputerHand, 50);
 
         let isFlag = true;
-        const fnClickButton = () => {
+        const fnClickButton = (e) => {
             if(isFlag) {
                 clearInterval(intervalId);
                 isFlag = false;
+
+                // 계산법
+                if(computerChoice === e.target.textContent) {
+                    score.textContent = "승"
+                }else{
+                    score.textContent = "패"
+                }
 
                 setTimeout(() => {
                     isFlag = true;
@@ -82,8 +89,7 @@
         rock.addEventListener('click', fnClickButton);
         paper.addEventListener('click', fnClickButton);
         
-        
-        // https://thebook.io/080270/0330/
+        // https://thebook.io/080270/0331/
     </script>
 </body>
 </html>
