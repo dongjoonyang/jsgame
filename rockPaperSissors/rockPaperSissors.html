@@ -35,7 +35,7 @@
         const computer = document.querySelector("#computer");
         const score = document.querySelector("#score");
         const scissors = document.querySelector("#scissors");
-        const ock = document.querySelector("#rock");
+        const rock = document.querySelector("#rock");
         const paper = document.querySelector("#paper");
 
         const IMG_URL = './rsp.png';
@@ -65,18 +65,25 @@
         // 0.05초마다 Rock Paper scissors 이미지 교체
         let intervalId = setInterval(changeComputerHand, 50);
 
-        // const fnClickButton = () => {
-        //     //clearInterval(intervalId);
+        let isFlag = true;
+        const fnClickButton = () => {
+            if(isFlag) {
+                clearInterval(intervalId);
+                isFlag = false;
 
-        //     setTimeout(() => {
-        //         intervalId = setInterval(changeComputerHand, 50);
-        //     }, 1000);
-        // }
+                setTimeout(() => {
+                    isFlag = true;
+                    intervalId = setInterval(changeComputerHand, 50);
+                }, 1000);
+            }
+        }
 
-        // scissors.addEventListener('click', fnClickButton);
+        scissors.addEventListener('click', fnClickButton);
+        rock.addEventListener('click', fnClickButton);
+        paper.addEventListener('click', fnClickButton);
         
         
-        // https://thebook.io/080270/0328/
+        // https://thebook.io/080270/0330/
     </script>
 </body>
 </html>
