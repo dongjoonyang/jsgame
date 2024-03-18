@@ -73,9 +73,28 @@
 
                 // 계산법
                 if(computerChoice === e.target.textContent) {
-                    score.textContent = "승"
-                }else{
-                    score.textContent = "패"
+                    score.textContent = "무승무"
+                }
+                
+                // 컴퓨터가 가위 인 경우
+                if(computerChoice === "scissors" && e.target.textContent === "rock"){
+                    score.textContent = "승";
+                } else if(computerChoice === "scissors" && e.target.textContent === "paper") {
+                    score.textContent = "패";
+                }
+
+                // 컴퓨터가 바위 인 경우
+                if(computerChoice === "rock" && e.target.textContent === "scissors"){
+                    score.textContent = "패";
+                } else if(computerChoice === "rock" && e.target.textContent === "paper") {
+                    score.textContent = "승";
+                }
+                
+                // 컴퓨터가 보인 경우
+                if(computerChoice === "paper" && e.target.textContent === "scissors"){
+                    score.textContent = "승";
+                } else if(computerChoice === "paper" && e.target.textContent === "rock") {
+                    score.textContent = "패";
                 }
 
                 setTimeout(() => {
