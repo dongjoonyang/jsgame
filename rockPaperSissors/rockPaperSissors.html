@@ -38,7 +38,7 @@
         const rock = document.querySelector("#rock");
         const paper = document.querySelector("#paper");
 
-        const IMG_URL = './rsp.png';
+        const IMG_URL = './rsp3.png';
 
         computer.style.background = `url(${IMG_URL}) 0 0`;
         computer.style.backgroundSize = 'auto 200px';
@@ -67,6 +67,17 @@
         // 0.05초마다 Rock Paper scissors 이미지 교체
         let intervalId = setInterval(changeComputerHand, 50);
 
+        // 가위: 1,  바위: 0,   보: -1
+        // 나\컴퓨터  가위    바위    보
+        // 가위       0       1       2
+        // 바위      -1       0       1
+        // 보        -2      -1       0
+        const scoreTable = {
+            rock: 0,
+            scissors: 1,
+            paper: -1,
+        };
+
         let isFlag = true;
         const fnClickButton = (e) => {
             if(isFlag) {
@@ -74,15 +85,24 @@
                 isFlag = false;
 
                 const myChoice = e.target.textContent === "가위" ? "scissors" : e.target.textContent === "바위" ? "rock" : "paper";
+                const myScore = scoreTable[myChoice];
+                const computerScore = scoreTable[computerChoice];
+                const diff = myScore - computerScore;
 
-                if(myChoice === "scissors") {
-                    if(computerChoice === "scissors") {
-                        score.textContent = "무승부"
-                    }
+                let message;
+                if ([2, -1].includes(diff)) {
+                    score += 1;
+                    message = '승리';
+                } else if ([-2, 1].includes(diff)) {
+                    score -= 1;
+                    message = '패배';
+                } else {
+                    message = '무승부';
                 }
-
+                
+                score.textContent = `${message} 총: ${score}점`;
                 setTimeout(() => {
-                    isFlag = true;
+                    clickable = true;
                     intervalId = setInterval(changeComputerHand, 50);
                 }, 1000);
             }
