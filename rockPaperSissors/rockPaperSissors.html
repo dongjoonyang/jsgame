@@ -38,7 +38,7 @@
         const rock = document.querySelector("#rock");
         const paper = document.querySelector("#paper");
 
-        const IMG_URL = './rsp3.png';
+        const IMG_URL = './rsp.png';
 
         computer.style.background = `url(${IMG_URL}) 0 0`;
         computer.style.backgroundSize = 'auto 200px';
@@ -72,6 +72,7 @@
         // 가위       0       1       2
         // 바위      -1       0       1
         // 보        -2      -1       0
+        // 승 : 2, -1 /  패 : 1,-2 /  무승부가 : 0
         const scoreTable = {
             rock: 0,
             scissors: 1,
@@ -79,6 +80,8 @@
         };
 
         let isFlag = true;
+        let scoreNum = 0;
+
         const fnClickButton = (e) => {
             if(isFlag) {
                 clearInterval(intervalId);
@@ -91,18 +94,19 @@
 
                 let message;
                 if ([2, -1].includes(diff)) {
-                    score += 1;
+                    scoreNum += 1;
                     message = '승리';
                 } else if ([-2, 1].includes(diff)) {
-                    score -= 1;
+                    scoreNum -= 1;
                     message = '패배';
                 } else {
                     message = '무승부';
                 }
                 
-                score.textContent = `${message} 총: ${score}점`;
+                score.textContent = `${message} 총: ${scoreNum}점`;
+
                 setTimeout(() => {
-                    clickable = true;
+                    isFlag = true;
                     intervalId = setInterval(changeComputerHand, 50);
                 }, 1000);
             }
@@ -112,7 +116,6 @@
         rock.addEventListener('click', fnClickButton);
         paper.addEventListener('click', fnClickButton);
         
-        // https://thebook.io/080270/0331/
     </script>
 </body>
 </html>
