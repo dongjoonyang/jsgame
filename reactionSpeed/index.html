@@ -19,42 +19,66 @@
         만약 준비 화면(빨강)일 때 클릭한다면 성급했다는 메시지가 나오고 다시 클릭하도록 대기 화면(파랑)으로 보냅니다.
     -->
     <div class="area">대기</div>
+    <button id="resetBtn">처음으로</button>
 
     <script>
         const $area = document.querySelector(".area");
-        let flag = true;
+        const $resetBtn = document.querySelector("#resetBtn");
 
-        $area.addEventListener('click', function(e) {
-            e.target.style.backgroundColor = "#ff602f";
-            e.target.textContent = "준비 3";
+        const clickPrevention = (e) => {
+            alert("게임 실행 전 입니다.")
+        }
 
-            let sec = 3;
-            let timerSecond = setInterval(() => {
-                sec--;
-                if(sec !== 0){
-                    e.target.textContent = sec;
-                }else{
-                    e.target.textContent = "클릭 하세요.";
-                }
-            }, 1000)
+        const clickArea = (e) => {
+            flag = false;
+            let end, start;
+            $area.addEventListener('click', clickPrevention);
+            $area.removeEventListener('click', clickArea);
+            e.target.style.backgroundColor = "#ff602f"; 
+            e.target.textContent = "준비";
 
             setTimeout(() => {
-                clearInterval(timerSecond); 
-                $area.style.backgroundColor = "#006a31";
+                let sec = 3;
+                e.target.textContent = sec;
+                let timerSecond = setInterval(() => {
+                    sec--;
+                    if(sec !== 0){
+                        e.target.textContent = sec;
+                    }else{
+                        e.target.textContent = "클릭 하세요.";
+                    }
+                }, 1000)
 
-                let end, start;
-                
-                start = new Date();
-                for (let i = 0, sum = 0; i < 100000; i++) {
-                    sum += i;
-                }
-                this.addEventListener('click', function(e){
-                    end = new Date();
-                    console.log(`${Math.floor(end - start) / 1000} 초`);
-                })
+                let setT = setTimeout(() => {
+                    $area.removeEventListener('click', clickPrevention);
+                    clearInterval(timerSecond); 
+                    e.target.style.backgroundColor = "#006a31";
 
-            }, 3000);
-        });
+                    start = new Date();
+                    for (let i = 0, sum = 0; i < 100000; i++) {
+                        sum += i;
+                    }
+
+                    const timerChk = () => {
+                        end = new Date();
+                        console.log(`${Math.floor(end - start) / 1000} 초`);
+                        flag = true;
+                    }
+
+                    $area.addEventListener('click', timerChk)
+                    $resetBtn.addEventListener('click', function(){
+                        $area.removeEventListener('click', timerChk);
+                        $area.style.backgroundColor = "#367ceb";
+                        $area.textContent = "대기";
+                        $area.addEventListener('click', clickArea);
+                    });
+                }, 3000);
+            }, 1000)
+        }
+
+        $area.addEventListener('click', clickArea);
+        // 순발력 테스트 게임으로 변경 캐릭터 랜덤으로 등장하는 것 클릭해서 맞추면 완료 // 모바일 일경우 터치
+        // 카카오 공유 붙여볼 것
     </script>
 </body>
 </html>
