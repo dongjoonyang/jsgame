@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .area{width: 100px;height: 100px;background-color: #367ceb;}
+    </style>
+</head>
+<body>
+    <!-- 
+        반응속도 테스트는 다음 과정으로 이뤄집니다.
+        사용자는 처음에 대기 화면인 파랑 화면을 보게 됩니다.
+        여기서 화면을 한 번 클릭하면 빨강 화면으로 전환되는데, 빨강 화면은 준비 화면을 의미합니다.
+        준비 화면에서는 임의의 시간이 지난 후에 초록 화면으로 자동 전환됩니다.
+        초록 화면을 보자마자 클릭하면 초록 화면이 뜬 시각과 클릭한 시각의 차이를 구해 반응속도를 측정합니다.
+        만약 준비 화면(빨강)일 때 클릭한다면 성급했다는 메시지가 나오고 다시 클릭하도록 대기 화면(파랑)으로 보냅니다.
+    -->
+    <div class="area">대기</div>
+
+    <script>
+        const $area = document.querySelector(".area");
+        let flag = true;
+
+        $area.addEventListener('click', function(e) {
+            e.target.style.backgroundColor = "#ff602f";
+            e.target.textContent = "준비 3";
+
+            let sec = 3;
+            let timerSecond = setInterval(() => {
+                sec--;
+                if(sec !== 0){
+                    e.target.textContent = sec;
+                }else{
+                    e.target.textContent = "클릭 하세요.";
+                }
+            }, 1000)
+
+            setTimeout(() => {
+                clearInterval(timerSecond); 
+                $area.style.backgroundColor = "#006a31";
+
+                let end, start;
+                
+                start = new Date();
+                for (let i = 0, sum = 0; i < 100000; i++) {
+                    sum += i;
+                }
+                this.addEventListener('click', function(e){
+                    end = new Date();
+                    console.log(`${Math.floor(end - start) / 1000} 초`);
+                })
+
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
