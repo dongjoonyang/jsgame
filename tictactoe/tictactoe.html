@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tictactoe</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        이 장에서는 틱택토 게임을 만듭니다. 
+        틱택토(tic-tac-toe) 게임은 오목의 축소판인 삼목이라고 보면 됩니다. 
+        삼목은 바둑판이 아니라 3 × 3 표 위에서 진행합니다. 
+        표와 같은 삼목 데이터는 자바스크립트에서 이차원 배열로 표현합니다. 
+        틱택토를 만들면서 이차원 배열로 데이터를 관리하고, 
+        배열 데이터를 HTML 화면에 그대로 표시하는 작업을 집중적으로 배워 봅니다.
+
+        바둑에 검은 돌과 흰 돌이 있듯이 틱택토에는 O와 X가 있습니다. 
+        책에서는 혼자 번갈아 가며 O와 X를 넣겠습니다(컴퓨터와 게임을 하는 방법은 셀프체크에서 다룹니다).
+        틱택토 게임의 순서도를 그려 봅시다.
+     -->
+     <table>
+        <tr>
+          <td id="td00"></td>
+          <td id="td01">X</td>
+          <td id="td02"></td>
+        </tr>
+        <tr>
+          <td id="td10">O</td>
+          <td id="td11"></td>
+          <td id="td12">O</td>
+        </tr>
+        <tr>
+          <td id="td20"></td>
+          <td id="td21">O</td>
+          <td id="td22">X</td>
+        </tr>
+      </table>
+    <script>
+        const obj = {
+            a: 'hello',
+            b: {
+                c: 'hi',
+                d: {e:'wow'}
+            }
+        }
+        const { a, b } = obj;
+        const { c, d } = obj.b;
+        const { e } = obj.b.d;
+
+        console.log(e)
+
+    </script>
+</body>
+</html>
