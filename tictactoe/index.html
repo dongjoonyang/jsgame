@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header> 
+        <div> 
+            <button>클릭</button> 
+        </div> 
+    </header> 
+
+    <script>
+        // 버튼을 클릭할 때 'hello, event bubbling'을 alert 하게 다음 코드를 수정하세요. 
+        // 단, 이벤트 리스너를 button 태그에 달아서는 안 됩니다.
+        const header = document.getElementsByTagName('header')[0];
+        const callback = (e) => {
+            console.log(e.currentTarget)
+        }
+        
+        header.addEventListener('click', callback);
+    </script>
+</body>
+</html>

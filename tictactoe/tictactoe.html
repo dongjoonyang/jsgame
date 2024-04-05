@@ -8,7 +8,6 @@
         table {
             border-collapse: collapse;
         }
-
         td {
             border: 1px solid black;
             width: 40px;
@@ -19,18 +18,24 @@
 </head>
 <body>
     <!-- 
-        이 장에서는 틱택토 게임을 만듭니다. 
-        틱택토(tic-tac-toe) 게임은 오목의 축소판인 삼목이라고 보면 됩니다. 
-        삼목은 바둑판이 아니라 3 × 3 표 위에서 진행합니다. 
-        표와 같은 삼목 데이터는 자바스크립트에서 이차원 배열로 표현합니다. 
+        틱택토(tic-tac-toe) 게임은 오목의 축소판인 삼목 
+        삼목은 바둑판이 아니라 3 × 3 표 위에서 진행
+        표와 같은 삼목 데이터는 자바스크립트에서 이차원 배열로 표현
         틱택토를 만들면서 이차원 배열로 데이터를 관리하고, 
-        배열 데이터를 HTML 화면에 그대로 표시하는 작업을 집중적으로 배워 봅니다.
+        배열 데이터를 HTML 화면에 그대로 표시하는 작업
 
-        바둑에 검은 돌과 흰 돌이 있듯이 틱택토에는 O와 X가 있습니다. 
-        책에서는 혼자 번갈아 가며 O와 X를 넣겠습니다(컴퓨터와 게임을 하는 방법은 셀프체크에서 다룹니다).
-        틱택토 게임의 순서도를 그려 봅시다.
+        틱택토는 O와 X로 표시
+        혼자 번갈아 가며 O와 X를 그림
+        
+        // 여기서 부터 진행 
+        번갈아 가며 칸을 채운 뒤 승자를 판단.
+        가로줄이나 세로줄, 대각선에 같은 모양이 오면 승리.
+        승자가 가려졌다면 누가 승자인지는 div 태그를 만들어 표시.
+        만약 9칸을 다 채웠는데 승자가 없다면 무승부라는 메시지를 표시.
+        먼저 승자인지를 판단하는 checkWinner 함수를 생성.
      -->
-     <table>
+
+     <!-- <table>
         <tr>
           <td id="td00"></td>
           <td id="td01">X</td>
@@ -46,21 +51,44 @@
           <td id="td21">O</td>
           <td id="td22">X</td>
         </tr>
-      </table>
+      </table> -->
+
     <script>
-        const obj = {
-            a: 'hello',
-            b: {
-                c: 'hi',
-                d: {e:'wow'}
+        const { body } = document;
+        const $table = document.createElement('table');
+        const $result = document.createElement('div'); // 결과창
+        const rows = [];
+        let turn = 'O';
+
+
+
+        const callback = (event) => {
+            if(event.target.textContent !== ""){
+                console.log('빈칸이 아닙니다.');
+            } else {
+                console.log('빈칸 입니다.');
+                event.target.textContent = turn;
+                turn = turn === 'X' ? 'O' : 'X';
             }
         }
-        const { a, b } = obj;
-        const { c, d } = obj.b;
-        const { e } = obj.b.d;
-
-        console.log(e)
-
+        
+        for (let i = 1; i <= 3; i += 1) {
+            const $tr = document.createElement('tr');
+            const cells = [];
+            for (let j = 1; j <= 3; j += 1) {
+                const $td = document.createElement('td');
+                cells.push($td);
+                $tr.appendChild($td);
+            }
+            rows.push(cells);
+            $table.appendChild($tr);
+        }
+        $table.addEventListener('click', callback);
+        body.appendChild($table);
+        body.appendChild($result);
     </script>
 </body>
 </html>
+
+
+
