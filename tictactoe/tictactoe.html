@@ -52,7 +52,6 @@
           <td id="td22">X</td>
         </tr>
       </table> -->
-
     <script>
         const { body } = document;
         const $table = document.createElement('table');
@@ -68,7 +67,14 @@
                 event.target.textContent = turn;
                 turn = turn === 'X' ? 'O' : 'X';
             }
-            
+
+            const hasWinner = checkWinner(event.target);
+            // 승자가 있으면
+            if (hasWinner) {
+                $result.textContent = `${turn}님이 승리!`;
+                $table.removeEventListener('click', callback);
+                return;
+            }
         }
         
         for (let i = 1; i <= 3; i += 1) {
@@ -83,14 +89,71 @@
             $table.appendChild($tr);
         }
 
-        const checkWinner = () => {
-            // 9칸 다 채운경우
-            
+
+        const checkWinner = (target) => {
+            let rowIndex;
+            let cellIndex;
+            rows.forEach((row, ri) => { // 배열 rows   [td],[td],[td]  ri = 0
+                                        //            [td],[td],[td]  ri = 1
+                                        //            [td],[td],[td]  ri = 2
+                row.forEach((cell, ci) => { // ci
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // 오로지 ci는 0, 1, 2를 가지고 있을 뿐
+
+                                            // cell
+                                            // 오로지 td를 가질 뿐임.  
+                    if (cell === target) {  // ex) [0][1] 의 cell을 클릭했다고 하면 
+                                            // [0][0] 째 cell === target 은 아래처럼 false 
+                                            // <td></td>  : cell 첫번째
+                                            // <td>0</td> : target       false
+                                            // <td>0</td>  : cell 두번째
+                                            // <td>0</td>  : taret       true 가 됨
+                        rowIndex = ri;      // 그러면 첫번째 반복문은 row가 ri = 0 
+                        cellIndex = ci;     // ci는 1이 됨
+                    }
+                });
+            });
+
+            let hasWinner = false;
+
+            // 가로줄 검사
+            if (
+                rows[rowIndex][0].textContent === turn &&
+                rows[rowIndex][1].textContent === turn &&
+                rows[rowIndex][2].textContent === turn
+            ) {
+                hasWinner = true;
+            }
+            // 세로줄 검사
+            if (
+                rows[0][cellIndex].textContent   === turn &&
+                rows[1][cellIndex].textContent === turn &&
+                rows[2][cellIndex].textContent === turn
+            ) {
+                hasWinner = true;
+            }
+            // 대각선 검사
+            if (
+                rows[0][0].textContent === turn &&
+                rows[1][1].textContent === turn &&
+                rows[2][2].textContent === turn
+            ) {
+                hasWinner = true;
+            }
+            if (
+                rows[0][2].textContent === turn &&
+                rows[1][1].textContent === turn &&
+                rows[2][0].textContent === turn
+            ) {
+                hasWinner = true;
+            }
+            return hasWinner;
         }
 
         $table.addEventListener('click', callback);
         body.appendChild($table);
-        checkWinner();
         
         body.appendChild($result);
     </script>
