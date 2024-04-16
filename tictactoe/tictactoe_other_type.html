@@ -27,7 +27,6 @@
         틱택토는 O와 X로 표시
         혼자 번갈아 가며 O와 X를 그림
         
-        // 여기서 부터 진행 
         번갈아 가며 칸을 채운 뒤 승자를 판단.
         가로줄이나 세로줄, 대각선에 같은 모양이 오면 승리.
         승자가 가려졌다면 누가 승자인지는 div 태그를 만들어 표시.
@@ -62,7 +61,6 @@
           <td id="td22">X</td>
         </tr>
       </table> -->
-
     <script>
         const { body } = document;
         const $table = document.createElement('table');
@@ -71,11 +69,14 @@
         let turn = 'O';
 
         const callback = (event) => {
-            if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
-                return;
+            if(event.target.textContent !== ""){
+                console.log('빈칸이 아닙니다.');
+            } else {
+                console.log('빈칸 입니다.');
+                event.target.textContent = turn;
+                turn = turn === 'X' ? 'O' : 'X';
             }
-            // 빈칸이면
-            event.target.textContent = turn;
+
             const hasWinner = checkWinner(event.target);
             // 승자가 있으면
             if (hasWinner) {
@@ -83,20 +84,6 @@
                 $table.removeEventListener('click', callback);
                 return;
             }
-            // 승자가 없으면
-            let draw = true;
-            rows.forEach((row) => {
-                row.forEach((cell) => {
-                    if (!cell.textContent) {
-                        draw = false;
-                    }
-                });
-            });
-            if (draw) {
-                $result.textContent = `무승부`;
-                return;
-            }
-            turn = turn === 'X' ? 'O' : 'X';
         }
         
         for (let i = 1; i <= 3; i += 1) {
@@ -111,10 +98,33 @@
             $table.appendChild($tr);
         }
 
+
         const checkWinner = (target) => {
-            let rowIndex = target.parentNode.rowIndex;;
-            let cellIndex = target.cellIndex;
-            
+            let rowIndex;
+            let cellIndex;
+            rows.forEach((row, ri) => { // 배열 rows   [td],[td],[td]  ri = 0
+                                        //            [td],[td],[td]  ri = 1
+                                        //            [td],[td],[td]  ri = 2
+                row.forEach((cell, ci) => { // ci
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // [td],[td],[td] ri = 0   /   0, 1, 2 
+                                            // 오로지 ci는 0, 1, 2를 가지고 있을 뿐
+
+                                            // cell
+                                            // 오로지 td를 가질 뿐임.  
+                    if (cell === target) {  // ex) [0][1] 의 cell을 클릭했다고 하면 
+                                            // [0][0] 째 cell === target 은 아래처럼 false 
+                                            // <td></td>  : cell 첫번째
+                                            // <td>0</td> : target       false
+                                            // <td>0</td>  : cell 두번째
+                                            // <td>0</td>  : taret       true 가 됨
+                        rowIndex = ri;      // 그러면 첫번째 반복문은 row가 ri = 0 
+                        cellIndex = ci;     // ci는 1이 됨
+                    }
+                });
+            });
+
             let hasWinner = false;
 
             // 가로줄 검사
