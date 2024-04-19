@@ -69,50 +69,48 @@
         const $result = document.createElement('div'); // 결과창
         const rows = [];
         let turn = 'O';
+        let clickable = true;
 
         const callback = (event) => {
+            if(!clickable) {
+                return;
+            }
             if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
                 return;
             }
             // 빈칸이면
             event.target.textContent = turn;
+            checkWinnerAndDraw(event.target);
 
-            const hasWinner = checkWinner(event.target);
+            if(turn === 'X') {
+                const emptyCells = rows.flat().filter((v) => !v.textContent);
+                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                clickable = false;
+
+                setTimeout(() => {
+                    randomCell.textContent = 'X';
+                    checkWinnerAndDraw(randomCell);
+                    clickable = true;
+                }, 1000);
+            }
+        }
+
+        const checkWinnerAndDraw = (target) => {
+            const hasWinner = checkWinner(target);
+
             // 승자가 있으면
             if (hasWinner) {
                 $result.textContent = `${turn}님이 승리!`;
                 $table.removeEventListener('click', callback);
                 return;
             }
-            
             // 승자가 없으면
             const draw = rows.flat().every((cell) => cell.textContent);
-
             if (draw) {
                 $result.textContent = '무승부';
                 return;
             }
             turn = turn === 'X' ? 'O' : 'X';
-
-            if(turn === 'X') {
-                const emptyCells = rows.flat().filter((v) => !v.textContent);
-                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                randomCell.textContent = 'X';
-                const hasWinner = checkWinner(randomCell);
-
-                // 승자가 있으면
-                if (hasWinner) {
-                    $result.textContent = `${turn}님이 승리!`;
-                    return;
-                }
-                // 승자가 없으면
-                const draw = rows.flat().every((cell) => cell.textContent);
-                if (draw) {
-                    $result.textContent = '무승부';
-                    return;
-                }
-                turn = turn === 'X' ? 'O' : 'X';
-            }
         }
         
         for (let i = 1; i <= 3; i += 1) {
