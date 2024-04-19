@@ -39,7 +39,7 @@
         마지막 체크포인트.
         
         지금까지는 혼자서 O와 X의 역할을 사용자가 함.
-        혼자서 게임을 하면 재미없으니 X의 역할은 컴퓨터가 하도록 변경.
+        X의 역할은 컴퓨터가 하도록 변경.
         이기기 위한 최선의 전략까지 구현하기는 아직 어려우므로 컴퓨터가 비어 있는 칸에 무작위로 X를 입력하게 변경
         힌트 컴퓨터의 차례는 callback 함수 안에 구현.
         rows 배열에서 비어 있는 칸들도 추려서 구현.
@@ -76,6 +76,7 @@
             }
             // 빈칸이면
             event.target.textContent = turn;
+
             const hasWinner = checkWinner(event.target);
             // 승자가 있으면
             if (hasWinner) {
@@ -83,20 +84,35 @@
                 $table.removeEventListener('click', callback);
                 return;
             }
+            
             // 승자가 없으면
-            let draw = true;
-            rows.forEach((row) => {
-                row.forEach((cell) => {
-                    if (!cell.textContent) {
-                        draw = false;
-                    }
-                });
-            });
+            const draw = rows.flat().every((cell) => cell.textContent);
+
             if (draw) {
-                $result.textContent = `무승부`;
+                $result.textContent = '무승부';
                 return;
             }
             turn = turn === 'X' ? 'O' : 'X';
+
+            if(turn === 'X') {
+                const emptyCells = rows.flat().filter((v) => !v.textContent);
+                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                randomCell.textContent = 'X';
+                const hasWinner = checkWinner(randomCell);
+
+                // 승자가 있으면
+                if (hasWinner) {
+                    $result.textContent = `${turn}님이 승리!`;
+                    return;
+                }
+                // 승자가 없으면
+                const draw = rows.flat().every((cell) => cell.textContent);
+                if (draw) {
+                    $result.textContent = '무승부';
+                    return;
+                }
+                turn = turn === 'X' ? 'O' : 'X';
+            }
         }
         
         for (let i = 1; i <= 3; i += 1) {
