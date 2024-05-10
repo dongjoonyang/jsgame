@@ -46,20 +46,15 @@
         const $startScreen = document.querySelector("#start-screen");
         const $gameMenu = document.querySelector("#game-menu");
         const $battleMenu = document.querySelector("#battle-menu");
-       
         const $heroName = document.querySelector("#hero-name");
         const $heroLevel = document.querySelector("#hero-level");
         const $heroHp = document.querySelector("#hero-hp");
         const $heroXp = document.querySelector("#hero-xp");
-        const $heroAtt = document.querySelector("#hero-att");
-
+        const $heroAtt = document.querySelector("#message");
         const $monsterName = document.querySelector('#monster-name');
         const $monsterHp = document.querySelector('#monster-hp');
         const $monsterAtt = document.querySelector('#monster-att');
         const $message = document.querySelector('#message');
-
-        const $startInput = document.querySelector('#name-input');
-        $startInput.focus();
 
         const hero = {
             name: '',
@@ -80,8 +75,6 @@
         $startScreen.addEventListener('submit', (event) => {
             event.preventDefault();
             const name = event.target['name-input'].value;
-            const $menuInput = document.querySelector('#menu-input');
-
             $startScreen.style.display = 'none';
             $gameMenu.style.display = 'block';
             $heroName.textContent = name;
@@ -90,15 +83,11 @@
             $heroXp.textContent = `XP: ${hero.xp}/${15 * hero.lev}`;
             $heroAtt.textContent = `ATT: ${hero.att}`;
             hero.name = name;
-
-            $menuInput.focus();
         });
 
         $gameMenu.addEventListener('submit', (event) => {
             event.preventDefault();
-            const $battleInput = document.querySelector('#battle-input');
             const input = event.target['menu-input'].value;
-
             if(input === "1"){
                 $gameMenu.style.display = 'none';
                 $battleMenu.style.display = 'block';
@@ -111,39 +100,12 @@
                 $monsterAtt.textContent = `ATT: ${monster.att}`;
             } 
             else if (input === "2") {
-                // 휴식 
-                hero.hp = hero.maxHp;
-                $heroHp.textContent = `HP: ${hero.hp}/${hero.maxHp}`;
-            }
-            else if (input === "3") {
-                // 종료
-                $message.textContent = `게임이 종료되었습니다.`;
-            }
-
-            $battleInput.focus();
-        });
-
-        $battleMenu.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const $battleInput = document.querySelector('#battle-input');
-            const inputValue = event.target['battle-input'].value;
-
-            monster.maxHp = monster.hp;
-            if(inputValue === "1"){
-                $monsterHp.textContent = `HP: ${monster.hp - hero.att} / ${monster.maxHp}`;
-                $heroHp.textContent = `HP: ${hero.hp - monster.att} / ${hero.maxHp}`;
-                $battleInput.value = null;
-            }
-            else if (inputValue === "2") {
                 
             }
-            else if (inputValue === "3") {
+            else if (input === "3") {
 
             }
-            
-            $battleInput.focus();
         });
-
     </script>
 </body>
 </html>
