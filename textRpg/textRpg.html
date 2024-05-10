@@ -135,7 +135,12 @@
                 $battleInput.value = null;
             }
             else if (inputValue === "2") {
-                
+                if(hero.hp < hero.maxHp){
+                    hero.hp += 20;
+                    hero.hp -= monster.att;
+                }
+                $heroHp.textContent = `HP: ${hero.hp}/${hero.maxHp}`;
+                $battleInput.value = null;
             }
             else if (inputValue === "3") {
 
