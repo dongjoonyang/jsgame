@@ -72,7 +72,7 @@
                 $gameMenu.addEventListener('submit', this.onGameMenuInput);
                 $battleMenu.addEventListener('submit', this.onBattleMenuInput); 
                 this.changeScreen('game');
-                this.hero = new Hero(name, this); 
+                this.hero = new Hero(this, name); 
                 this.updateHeroStat();
             }
 
@@ -108,13 +108,13 @@
                 }
             }
 
-            onBattleMenuInput(event) {
+            onBattleMenuInput = (event) => {
                 event.preventDefault();
                 const input = event.target['battle-input'].value;
                 if(input === '1') { // 공격
-                    const { hero, moster } = this;
+                    const { hero, monster } = this;
                     hero.attack(monster);
-                    monster.attact(hero);
+                    monster.attack(hero);
                     if(hero.hp <= 0) { // 주인공 체력 0 게임 오버
                         this.showMessage(`${hero.lev}레벨에서 전사. 주인공을 새로 생성하세요.`); 
                         this.quit();                    
@@ -122,14 +122,12 @@
                         this.showMessage(`몬스터를 잡아 ${monster.xp} 경험치를 얻었다.`);
                         hero.getXp(monster.xp);
                         this.monster = null;
-                        this.updateHeroStat(); 
-                        this.updateMonsterStat();
                         this.changeScreen('game');
                     } else { // 피해 주고받기
                         this.showMessage(`${hero.att}의 피해를 주고, ${monster.att}의 피해를 받았다.`);
-                        this.updateHeroStat(); 
-                        this.updateMonsterStat();
                     }
+                    this.updateHeroStat(); 
+                    this.updateMonsterStat();
                 }else if(input === '2') { // 회복
                     /*
                     회복은 전투 중에 체력을 20 회복하는 기능입니다. 
@@ -138,24 +136,18 @@
                     예를 들어, 최대 체력이 80이고 현재 체력이 70이라면 체력을 20 회복해도 90이 아니라 80이 됩니다.
                     힌트 회복 기능에는 Math.min() 메서드를 사용
                     */
-                    const { hero, moster } = this;
-                    console.log(hero);
-
+                    const { hero, monster } = this;
+                    hero.hp = Math.min(hero.maxHp, hero.hp + 20);
+                    monster.attack(hero);
                 } else if(input === '3') { // 도망
                     /*
                     도망은 강력한 몬스터를 만났을 때 도망가는 기능으로, 일반 메뉴로 돌아가게 합니다.
                     */
+                    this.changeScreen('game');
+                    this.showMessage('도망감');
+                    this.monster = null;
+                    this.updateMonsterStat();
                 }
-            }
-            quit() { // 게임 오버 메서드
-                this.hero = null; 
-                this.monster = null; 
-                this.updateHeroStat();
-                this.updateMonsterStat();
-                $gameMenu.removeEventListener('submit', this.onGameMenuInput);
-                $battleMenu.removeEventListener('submit', this.onBattleMenuInput); 
-                this.changeScreen('start');
-                game = null;
             }
 
             updateHeroStat() {
@@ -174,22 +166,24 @@
                 $heroXp.textContent = `XP: ${hero.xp}/${15 * hero.lev}`;
                 $heroAtt.textContent = `ATT: ${hero.att}`;
             }
+
             createMonster() { // 몬스터 생성 메서드
                 const randomIndex = Math.floor(Math.random() * this.monsterList.length); 
                 const randomMonster = this.monsterList[randomIndex];
                 this.monster = new Monster(
+                    this,
                     randomMonster.name,
                     randomMonster.hp,
                     randomMonster.att,
                     randomMonster.xp,
                 );
-                this.updateHeroStat();
+                this.updateMonsterStat();
                 this.showMessage(`몬스터와 마주쳤다. ${this.monster.name}인 것 같다!`);
             }
 
             updateMonsterStat(){
                 const { monster } = this;
-                if(moster === null){
+                if(monster === null){
                     $monsterName.textContent = '';
                     $monsterHp.textContent = '';
                     $monsterAtt.textContent = ''; 
@@ -203,10 +197,22 @@
             showMessage(text) {
                 $message.textContent = text;
             }
+
+            quit() { // 게임 오버 메서드
+                this.hero = null; 
+                this.monster = null; 
+                this.updateHeroStat();
+                this.updateMonsterStat();
+                $gameMenu.removeEventListener('submit', this.onGameMenuInput);
+                $battleMenu.removeEventListener('submit', this.onBattleMenuInput); 
+                this.changeScreen('start');
+                game = null;
+            }
         }
 
         class Unit {
-            constructor(name, hp, att, xp){
+            constructor(game, name, hp, att, xp){
+                this.game = game;
                 this.name = name;
                 this.maxHp = hp;
                 this.hp = hp;
@@ -220,10 +226,13 @@
         }
 
         class Hero extends Unit {
-            constructor(name, game) { // 생성자
-                super(name, 100, 10, 0);
+            constructor(game, name) { // 생성자
+                super(game, name, 100, 10, 0);
                 this.lev = 1;
-                this.game = game;
+            }
+            attack(target) {
+                super.attack(target); // 부모 클래스의 attack
+                // 부모 클래스 attack 외의 동작
             }
             heal(monster){
                 this.hp += 20;
@@ -232,17 +241,20 @@
             getXp(xp) { // 레벨 업 메서드
                 this.xp += xp;
                 if (this.xp >= this.lev * 15) { // 경험치를 다 채우면(주인공 레벨 × 15)
-                    this.xp -= this.lev * 15; 
+                    this.xp -= this.lev * 15; // xp: 5,  lev: 2, maxXp: 15
                     this.lev += 1;
                     this.maxHp += 5;
-                    this.att += 5; 
-                    this.game.showMessage(`레벨 업! ${this.lev}레벨이 되었습니다.`)
+                    this.att += 5;
+                    this.hp = this.maxHp;
+                    this.game.showMessage(`레벨업! 레벨 ${this.lev}`);
                 }
             }
         }
 
         class Monster extends Unit {
-
+            constructor(game, name, hp, att, xp) {
+                super(game, name, hp, att, xp);
+            }
         }
 
         let game = null;
