@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카드</title>
+    <link rel="stylesheet" href="./card.css" />
+</head>
+<body>
+    <!-- 
+        [카드 맞추기]
+        카드가 12장 있고, 2장씩 서로 앞면의 색 동일.
+        게임이 시작되면 카드를 무작위로 섞어 배치한 뒤에 모든 카드의 앞면을 잠깐 표시.
+        일정 시간 후에 카드가 모두 뒷면으로 돌아가면 카드를 2장씩 뒤집으며 확인.
+        카드 12장을 모두 뒤집을 때까지 계속하고 카드의 짝을 모두 맞추면 끝.
+     -->
+    <div class="wrap">
+        <div id="" data-value="" class="card flipped">
+            <div class="card_front">앞면</div>
+            <div class="card_back">뒷면</div>
+        </div>
+
+        <div id="" data-value="" class="card flipped">
+            <div class="card_front">앞면</div>
+            <div class="card_back">뒷면</div>
+        </div>
+
+        <div id="" data-value="" class="card flipped">
+            <div class="card_front">앞면</div>
+            <div class="card_back">뒷면</div>
+        </div>
+
+        <div id="" data-value="" class="card flipped">
+            <div class="card_front">앞면</div>
+            <div class="card_back">뒷면</div>
+        </div>
+    </div>
+
+    <script>
+        const cardList = document.querySelectorAll('.wrap .card');
+        const cardItemsArr = []; // card 배열 변수
+        // flipped
+        const cardColor = ['red', 'blue', 'red', 'blue'];
+        // random
+        // slice
+        console.log(cardColor.slice(3))
+    </script>
+</body>
+</html>
