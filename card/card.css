@@ -9,7 +9,11 @@
 .card_back{color: #000;border: 1px solid #ddd;transform: rotateY(180deg);}
 .card.red .card_front{background-color: red;color: #eee;}
 .card.blue .card_back{background-color: blue;color: #eee;}
-
+/* ly_pop */
+.ly_pop.active{display: flex;align-items: center;justify-content: center;}
+.ly_pop{display: none;position: fixed;top: 0;left: 0;right: 0;bottom: 0;}
+.ly_pop .dimm{position: absolute;left:0;top:0;right:0;bottom:0;background-color: #000;opacity: 0.5;}
+.ly_pop .txt{color: #fff;z-index: 10;}
 
 
 
