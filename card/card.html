@@ -16,9 +16,7 @@
         카드 12장을 모두 뒤집을 때까지 계속하고 카드의 짝을 모두 맞추면 끝.
      -->
     <div class="wrap">
-        <button type="button" id="startBtn">시작</button>
-
-        <div id="" data-value="" class="card ">
+        <div id="ss" data-value="1" class="card">
             <div class="card_front">앞면</div>
             <div class="card_back">뒷면</div>
         </div>
@@ -46,17 +44,39 @@
         const cardList = document.querySelectorAll('.wrap .card'); // 카드요소
         const cardEndArr = []; // 완료카드
         const cardChoiceArr = []; // 뒤집힌카드 - 선택된 카드
-        const cardColorArr = ['red', 'red', 'blue', 'blue']; // 색상코드
+        let cardColorArr = ['red', 'blue', 'red', 'blue']; // 색상코드
 
-        const startBtn = document.querySelector("#startBtn"); // 시작버튼
-        
         // 뒷면이 처음에 보인다.
-        // flipped
-        startBtn.addEventListener('click', () => {
-            console.log("111");
+        // flipped 클래스명을 추가하면 회전한다 앞면 보이게
+        // 게임이 시작되면 카드를 무작위로 섞어 배치
+
+        // 색상코드를 빼서 element 순서대로 색상 대입
+        // data-value , class 명에 대입
+        //cardList.setAttribute["data", "helloButton"];
+
+        if (cardList.length !== cardColorArr.length) {
+            console.error("카드 리스트의 길이와 색상 배열의 길이가 맞지 않습니다.");
+        } else {
+            // 게임이 시작되면 카드를 무작위로 섞어 배치
+            for(let i = 0; i < cardList.length; i++){
+                // 무작위 인덱스 선택
+                const deletedIndex = Math.floor(Math.random() * cardColorArr.length);
+                
+                // 선택된 색상을 data-value에 설정
+                cardList[i].setAttribute('data-value', cardColorArr[deletedIndex]);
+                
+                // 사용된 색상을 배열에서 제거
+                cardColorArr.splice(deletedIndex, 1);
+            }
+        }
+
+        // 콘솔에서 확인
+        cardList.forEach(card => {
+            console.log(card.getAttribute('data-value'));
         });
+        // 모든 카드의 앞면을 잠깐 표시
         
-        console.log(cardColor.slice(3))
+        
     </script>
 </body>
 </html>
