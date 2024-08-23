@@ -5,13 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>카드</title>
-    <link rel="stylesheet" href="./card.css" />
+    <style>
+        /* wrap */
+        .wrap{display: flex;gap: 10px}
+
+        /* card */
+        .card{display: inline-block;transition: all .5s;transform: perspective(800px) rotateY(180deg);transform-style: preserve-3d;width: 60px;height: 100px;padding: 10px;font-size: 12px;}
+        .card > div{position: absolute;top: 0;left: 0;display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;border-radius: 10px;backface-visibility: hidden;}
+        .card_front{border: 1px solid #ddd;z-index: 10;}
+        .card.flipped{transform: perspective(800px) rotateY(0deg);}
+        .card.active{cursor: pointer;}
+        .card_back{color: #000;border: 1px solid #ddd;transform: rotateY(180deg);background: url('./card_back.png') no-repeat center center / 100% 100%;}
+        .card[data-value="red"] .card_front{background-color: #fff0f0;color: #333;}
+        .card[data-value="blue"] .card_front{background-color: #cce8ff;color: #333;}
+        .card[data-value="green"] .card_front{background-color: #bdffd3;color: #333;}
+
+        /* ly_pop */
+        .ly_pop.active{display: flex;align-items: center;justify-content: center;}
+        .ly_pop{display: none;position: fixed;top: 0;left: 0;right: 0;bottom: 0;}
+        .ly_pop .dimm{position: absolute;left:0;top:0;right:0;bottom:0;background-color: #000;opacity: 0.5;}
+        .ly_pop .txt{color: #fff;z-index: 10;text-align: center;line-height: 32px;}
+        .ly_pop .txt_count{font-size: 40px;font-weight: bold;color: #fff;}
+
+        /* result_pop */
+        .result_pop.active{display: flex;align-items: center;justify-content: center;}
+        .result_pop{display: none;position: fixed;top: 0;left: 0;right: 0;bottom: 0;}
+        .result_pop .dimm{position: absolute;left:0;top:0;right:0;bottom:0;background-color: #000;opacity: 0.5;}
+        .result_pop .txt{color: #fff;z-index: 10;text-align: center;line-height: 32px;font-size: 24px;font-weight: bold;}
+    </style>
 </head>
 <body>
     <!-- 
         [카드 맞추기]
         카드가 12장 있고, 2장씩 서로 앞면의 색 동일.
-        게임이 시작되면 카드를 무작위로 섞어 배치한 뒤에 모든 카드의 앞면을 잠깐 표시.
+        게임이 시작되면 카드를 무작위로 섞어 배치한 뒤에 모든 카드의 앞면을 잠깐 표���.
         일정 시간 후에 카드가 모두 뒷면으로 돌아가면 카드를 2장씩 뒤집으며 확인.
         카드 12장을 모두 뒤집을 때까지 계속하고 카드의 짝을 모두 맞추면 끝.
      -->
@@ -73,7 +100,7 @@
         // 카드 게임 시작 알림 팝업 함수
         const cardGameReadyInit = () => {
             const txtCount = document.querySelector('.txt_count');
-            lyPopEl.classList.add('active'); 
+            lyPopEl?.classList.add('active'); 
 
             // 3초 후 게임 시작
             txtCount.innerHTML = 3;
@@ -108,12 +135,12 @@
 
             // 시작 팝업 닫기
             const lyPopEl = document.querySelector('.ly_pop');
-            lyPopEl.classList.remove('active');
+            lyPopEl?.classList.remove('active');
 
-            // 모든 카드의 앞면을 잠깐 표시
+            // 모든 카드��� 앞면을 잠깐 표시
             const cards = document.querySelectorAll('.card'); // 카드 엘리먼트
-            cards.forEach(card => card.classList.add('flipped'));
-
+            cards?.forEach(card => card.classList.add('flipped'));
+            
             setTimeout(() => {    
                 const cardEventHandler = (event) => {
                     let target = event.currentTarget;
@@ -154,7 +181,7 @@
                         cardFlippedHandler();
                     }
 
-                    if (cardEndArr.length === 6) { 
+                    if (cardEndArr.length === cardColorArr.length) { 
                         setTimeout(() => {   
                             isGameActive = false;
                             cards.forEach(card => {
@@ -178,28 +205,27 @@
             }, 3000);
         };
 
-
-        window.onload = () => {
+        (()=>{
             cardGameReadyInit(); // 카드 게임 시작 알림 팝업
             cardCreateInit(); // 카드 생성
             setTimeout(() => {
                 cardGameStartInit(); // 함수 실행
             }, 3000);
+        })();
 
-            // 재시작
-            const restartBtn = document.querySelector('#restartBtn');
-            if(restartBtn && !isGameActive){
-                restartBtn.addEventListener('click', () => {
-                    resultPopEl.classList.remove('active');
-                    cardGameReadyInit(); // 카드 게임 시작 알림 팝업
-                    cardCreateInit(); // 카드 생성
-                    setTimeout(() => {
-                        cardGameStartInit();
-                    }, 3000)
-
-                });
-            }
+        // 재시작
+        const restartBtn = document.querySelector('#restartBtn');
+        if(restartBtn && !isGameActive){
+            restartBtn.addEventListener('click', () => {
+                resultPopEl.classList.remove('active');
+                cardGameReadyInit(); // 카드 게임 시작 알림 팝업
+                cardCreateInit(); // 카드 생성
+                setTimeout(() => {
+                    cardGameStartInit();
+                }, 3000)
+            });
         }
+        
     </script>
 </body>
 </html>
