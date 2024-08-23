@@ -5,34 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>카드</title>
-    <style>
-        /* wrap */
-        .wrap{display: flex;gap: 10px}
-
-        /* card */
-        .card{display: inline-block;transition: all .5s;transform: perspective(800px) rotateY(180deg);transform-style: preserve-3d;width: 60px;height: 100px;padding: 10px;font-size: 12px;}
-        .card > div{position: absolute;top: 0;left: 0;display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;border-radius: 10px;backface-visibility: hidden;}
-        .card_front{border: 1px solid #ddd;z-index: 10;}
-        .card.flipped{transform: perspective(800px) rotateY(0deg);}
-        .card.active{cursor: pointer;}
-        .card_back{color: #000;border: 1px solid #ddd;transform: rotateY(180deg);background: url('./card_back.png') no-repeat center center / 100% 100%;}
-        .card[data-value="red"] .card_front{background-color: #fff0f0;color: #333;}
-        .card[data-value="blue"] .card_front{background-color: #cce8ff;color: #333;}
-        .card[data-value="green"] .card_front{background-color: #bdffd3;color: #333;}
-
-        /* ly_pop */
-        .ly_pop.active{display: flex;align-items: center;justify-content: center;}
-        .ly_pop{display: none;position: fixed;top: 0;left: 0;right: 0;bottom: 0;}
-        .ly_pop .dimm{position: absolute;left:0;top:0;right:0;bottom:0;background-color: #000;opacity: 0.5;}
-        .ly_pop .txt{color: #fff;z-index: 10;text-align: center;line-height: 32px;}
-        .ly_pop .txt_count{font-size: 40px;font-weight: bold;color: #fff;}
-
-        /* result_pop */
-        .result_pop.active{display: flex;align-items: center;justify-content: center;}
-        .result_pop{display: none;position: fixed;top: 0;left: 0;right: 0;bottom: 0;}
-        .result_pop .dimm{position: absolute;left:0;top:0;right:0;bottom:0;background-color: #000;opacity: 0.5;}
-        .result_pop .txt{color: #fff;z-index: 10;text-align: center;line-height: 32px;font-size: 24px;font-weight: bold;}
-    </style>
 </head>
 <body>
     <!-- 
