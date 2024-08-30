@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{border: 1px solid #ddd;}
+        table tr{display:block;border-bottom:1px solid #ddd;}
+        table tr:last-child{border-bottom: 0;}
+        table tr td{position: relative; border-right: 1px solid #ddd;width: 30px;height: 30px;text-align: center;}
+        table tr td:last-child{border-right: 0;}
+        table tr td .close{position: absolute;transform: translate(-50%, -50%);top: 50%;left: 50%;width: 30px;height: 30px;background-color: #ddd;z-index: 1;}
+        table tr td .mine{width:10px;height: 10px;background-color: red;margin:0 auto;border-radius: 50%;}
+        table tr td .question{position: absolute;top:0;right:0;bottom:0;left:0;background-color: rgb(165, 99, 250);}
+        table tr td .flag{position: absolute;top:0;right:0;bottom:0;left:0;background-color: #888;}
+
+        .info{display: flex;gap: 30px;margin-bottom: 15px;}
+        .mine_count{display: flex;}
+        .mine_count strong{margin-right: 3px;}
+        #mineCount{margin-left: 3px;}
+        .flag_count{display: flex;}
+        .flag_count strong{margin-right: 3px;}
+        #flagCount{margin-left: 3px;}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="info">
+            <div class="mine_count">
+                <strong>Mine</strong>:
+                <span id="mineCount"></span>
+            </div>
+            <div class="flag_count">
+                <strong>Flag</strong>:
+                <span id="flagCount"></span>
+            </div>
+        </div>
+        <div id="mineMap"></div>
+    </div>
+    <script>
+        window.onload = () => {
+            // 표 생성 함수
+            const createMap = () => {
+                const table = document.createElement('table');
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                let closeEl = document.createElement('div');
+                let i = 0;
+
+                const mineMap = document.querySelector('#mineMap');
+                mineMap.insertBefore(table, null);
+                
+                for (let index = 0; index < 8; index++) {
+                    let newRow = table.insertRow(tr);
+                    for (let index = 0; index < 8; index++) {
+                        let newCell = newRow.insertCell(td);
+                        
+                        let closeClone = closeEl.cloneNode(true);
+                        newCell.appendChild(closeClone).classList.add('close');
+                    }
+                }
+            }
+            
+            // 랜덤 숫자 생성 함수
+            const generateUniqueRandomNumbers = (number) => {
+                const numbers = new Set(); 
+
+                while (numbers.size < 6) {
+                    const randomNumber = Math.floor(Math.random() * number); 
+                    numbers.add(randomNumber);
+                }
+
+                return Array.from(numbers); 
+            }
+
+
+            // mine 생성 함수
+            const mineMakers = () => {
+                const mapAreas = document.querySelectorAll('td');
+                const mine = document.createElement('div');
+                const randomNumbers = generateUniqueRandomNumbers(64); // map 칸
+
+                for (let index = 0; index < randomNumbers.length; index++) {
+                    let mineClone = mine.cloneNode(true);
+                    mapAreas[randomNumbers[index]].appendChild(mineClone).classList.add('mine');
+                }
+            }
+
+            // mine count 개수 표시
+            const mineCountView = () => {
+                const mineCountEl = document.querySelector('#mineCount');
+                mineCountEl.innerHTML = 6; // 고정 값
+            }
+
+            // flag count 개수 표시
+            const flagCountView = (count) => {
+                const flagCountEl = document.querySelector('#flagCount');
+                flagCountEl.innerHTML = count;
+            }
+
+            //  좌측 이벤트
+            const mouseLeftEvent = () => {
+                const mapAreas = document.querySelectorAll('td');
+           
+                mapAreas.forEach(mapArea => {
+                    mapArea.addEventListener('click', (event) => {
+                        const target = event.target;
+                        target.classList.remove('close');
+                    });
+                });
+            }
+
+            // 우측 이벤트
+            const mouseRightEvent = () => {
+                const mapAreas = document.querySelectorAll('td');
+           
+                mapAreas.forEach(mapArea => {
+                    mapArea.addEventListener('contextmenu', (event) => {
+                        event.preventDefault();
+                        const target = event.target;
+
+                        if(target.classList.contains('close')){
+                            target.classList.remove('close');
+                            target.classList.add('question');
+                        } else if(target.classList.contains('question')) {
+                            target.classList.remove('question');
+                            target.classList.add('flag');
+                        } else if(target.classList.contains('flag')) {
+                            target.classList.remove('flag');
+                            target.classList.add('close');
+                        }
+                    });
+                });
+            }
+            
+            createMap(); // map 생성
+            mineMakers(); // mine 심기
+            mineCountView(); // mine Count
+            flagCountView(6); // flag setting
+            mouseLeftEvent();
+            mouseRightEvent();
+        }
+    </script>
+</body>
+</html>
